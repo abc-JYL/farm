@@ -8,5 +8,6 @@ struct Save {
 };
 
 int load_save(const char *path, struct Save *save);
+int save_save(const char *path, struct Save *save);
 void deinit_save(struct Save *save);
 

@@ -7,7 +7,7 @@ int change_save_content_size(struct Save *save) {
     save->capacity *= 2;
     char **temp = (char **)realloc(save->save, save->capacity * sizeof(char *));
     if (temp == NULL) {
-        puts("Failed to reallocate memory for the language pack!");
+        puts("Failed to reallocate memory for the save!");
         return 1;
     }
     save->save = temp;
@@ -19,7 +19,7 @@ int load_save(const char *path, struct Save *save) {
     save->capacity = 8;
     save->save = (char **)malloc(save->capacity * sizeof(char *));
     if (save->save == NULL) {
-        puts("Failed to allocate memory for the language pack!");
+        puts("Failed to allocate memory for the save!");
         return 1;
     }
 
@@ -27,7 +27,7 @@ int load_save(const char *path, struct Save *save) {
     size_t len = 0;
     FILE *fptr = fopen(path, "r");
     if (fptr == NULL) {
-        puts("Failed to load the language pack!");
+        puts("Failed to load the save!");
         free(save->save);
         return 1;
     }
@@ -45,6 +45,19 @@ int load_save(const char *path, struct Save *save) {
     }
 
     free(line);
+    fclose(fptr);
+    return 0;
+}
+
+int save_save(const char *path, struct Save *save) {
+    FILE *fptr = fopen(path, "w");
+    if (fptr == NULL) {
+	return 1;
+    }
+
+    for (int i = 0; i < save->size; i++) {
+	fputs(save->save[i], fptr);
+    }
     fclose(fptr);
     return 0;
 }
